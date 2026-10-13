@@ -9,31 +9,67 @@ remediation plan.
 
 Originally developed on a multi-variant AI agent system; works on any codebase.
 
-## Install
+## Install in Claude Code
 
-Skills live in `.claude/skills/<name>/` inside your project, or in `~/.claude/skills/<name>/`
-to make them available globally across all projects.
+Prerequisites: [Claude Code](https://code.claude.com/docs/en/overview) and Git installed.
+Run the installation commands below in your terminal. They download this skill;
+installing or updating an AI coding CLI does not install the skill.
 
-**Project-scoped:**
+Choose **one** installation scope. Both options include `SKILL.md` and the supporting
+`REPORT_TEMPLATE.md` in the directory Claude Code uses to discover the skill.
+
+### Global (available in every project)
+
+```bash
+mkdir -p "$HOME/.claude/skills"
+git clone https://github.com/kmajerowicz/stability-audit.git \
+  "$HOME/.claude/skills/stability-audit"
+```
+
+### Project-scoped (available only in one project)
+
+Run this from the root of the project you want to audit:
+
 ```bash
 mkdir -p .claude/skills
-cp -r path/to/stability-audit .claude/skills/
+git clone https://github.com/kmajerowicz/stability-audit.git \
+  .claude/skills/stability-audit
 ```
 
-**Global (available in every project):**
+These commands are for a fresh installation. If the destination already contains a
+clone of this repository, use the update command below. If you previously copied the
+skill there, move that copy elsewhere before cloning.
+
+### Update
+
+For a global installation:
+
 ```bash
-mkdir -p ~/.claude/skills
-cp -r path/to/stability-audit ~/.claude/skills/
+git -C "$HOME/.claude/skills/stability-audit" pull --ff-only
 ```
 
-**To stay current with updates**, clone this repo and symlink instead of copying:
+For a project installation, run from the project root:
+
 ```bash
-mkdir -p ~/.claude/skills
-ln -s /path/to/stability-audit ~/.claude/skills/stability-audit
+git -C .claude/skills/stability-audit pull --ff-only
 ```
 
-Once the folder is in place, restart Claude Code. Invoke it with `/stability-audit` in the
-prompt, or just ask Claude to "audit this service" / "find out why it's flaky."
+Updates are manual: cloning or symlinking the repository does not download future
+changes automatically.
+
+### Use
+
+Start a new Claude Code session in the project you want to audit. In the Claude Code
+prompt, type:
+
+```text
+/stability-audit
+```
+
+You can also ask Claude to "audit this service" or "find out why it's flaky."
+If the command is missing, check that `SKILL.md` is directly inside
+`~/.claude/skills/stability-audit/` (global) or `.claude/skills/stability-audit/`
+(project-scoped), as described in the [Claude Code skills documentation](https://code.claude.com/docs/en/skills).
 
 ## What's in here
 
